@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "847210619276",
+    "project_id": "hamodi-840ac",
+    "storage_bucket": "hamodi-840ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847210619276:android:142f593c77f7ddbce936a9",
+        "android_client_info": {
+          "package_name": "com.example.hamodi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM9zgUCqb_190uvn7D6GgV3DcrCoAop9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
