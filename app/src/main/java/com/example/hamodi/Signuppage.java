@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +25,9 @@ public class Signuppage extends AppCompatActivity {
     EditText passwordEditText;
     EditText repasswordEditText;
     Button registerButton;
+    EditText admincode;
+    Button RegisterButton;
+    Switch isadmin;
     TextView errorText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class Signuppage extends AppCompatActivity {
         repasswordEditText=findViewById(R.id.PasswordConfirm);
         registerButton=findViewById(R.id.Bregister);
         errorText=findViewById(R.id.TvError);
+        isadmin = findViewById(R.id.SwAdmin);
+        admincode = findViewById(R.id.etAdminCode);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +75,11 @@ public class Signuppage extends AppCompatActivity {
             errorText.setText("password dosn't match");
             return;
         }
+        if(isadmin.isChecked() && !admincode.getText().toString().equals("13579")) {
+            errorText.setVisibility(View.VISIBLE);
+            errorText.setText("admin code is incorrect");
+            return;
+        }
         final FirebaseAuth mAuth=FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,9 +88,12 @@ public class Signuppage extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = mAuth.getCurrentUser();
+                            String name=fullNameEditText.getText().toString();
+                            if(isadmin.isChecked()){
+                                name = "admin: "+name;
 
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(fullNameEditText.getText().toString())
+                                    .setDisplayName(name)
                                     .build();
 
                             user.updateProfile(profileUpdates)

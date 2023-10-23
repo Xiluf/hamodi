@@ -94,8 +94,18 @@ public class Product implements sqlInterface {
                 COLUMN_PRODUCT_BUYPRICE
         };
 // How you want the results sorted in the resulting Cursor
-        String sortOrder =
-                BaseColumns._ID + " DESC";
+        public Cursor SelectById(SQLiteDatabase db,String id) {
+            String[] projection = {
+                    BaseColumns._ID,
+                    COLUMN_PRODUCT_NAME,
+                    COLUMN_PRODUCT_DESCRIPTION,
+                    COLUMN_PRODUCT_IMAGE,
+                    COLUMN_PRODUCT_STOCK,
+                    COLUMN_PRODUCT_SALEPRICE,
+                    COLUMN_PRODUCT_BUYPRICE
+            };
+            String selection = BaseColumns._ID + " = ?";
+            String[] selectionArgs = {id};
         Cursor c = db.query(TABLE_PRODUCT,
                 projection,
                 null,

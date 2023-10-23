@@ -7,6 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".Signuppage">
 
+    <Switch
+        android:id="@+id/SwAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
+        android:text="Admin"
+        android:textOff="No"
+        android:textOn="Yes"
+        app:layout_constraintEnd_toStartOf="@+id/etAdminCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etAdminCode"
+        android:layout_width="121dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="70dp"
+        android:ems="10"
+        android:hint="admin code"
+        android:inputType="number"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/ptUserName"
         android:layout_width="wrap_content"
@@ -94,4 +121,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Bregister" />
+
+    <Switch
+        android:id="@+id/AdminS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin"
+        tools:layout_editor_absoluteX="101dp"
+        tools:layout_editor_absoluteY="26dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
