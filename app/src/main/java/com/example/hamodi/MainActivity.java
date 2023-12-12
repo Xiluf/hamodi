@@ -18,7 +18,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hamodi.Admin.AddProductActivity;
+import com.example.hamodi.Admin.ShowProduct;
 import com.example.hamodi.User.CartFragment;
+import com.example.hamodi.User.Homefragment;
 import com.example.hamodi.User.Homefragment;
 import com.example.hamodi.User.InfoFragment;
 import com.example.hamodi.User.ProductFragment;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         FirebaseUser user = fauth.getCurrentUser();
         if (user != null) {
+            if(user.getDisplayName().startsWith("admin:")){
+                Intent i = new Intent(MainActivity.this, ShowProduct.class);
+                startActivity(i);
+            }
             View header = navigationView.getHeaderView(0);
             username = header.findViewById(R.id.tvUsermame);
             email = header.findViewById(R.id.tvUserEmail);

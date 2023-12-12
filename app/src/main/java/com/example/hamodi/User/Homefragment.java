@@ -1,66 +1,64 @@
 package com.example.hamodi.User;
 
+import static com.example.hamodi.DataTables.TablesString.ProductTable.*;
+
+import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.hamodi.Classes.Product;
+import com.example.hamodi.Classes.ProductsAdapter;
+import com.example.hamodi.DataTables.DBHelper;
 import com.example.hamodi.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Homefragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Homefragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Homefragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Homefragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Homefragment newInstance(String param1, String param2) {
-        Homefragment fragment = new Homefragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    List<Product> productList;
+    RecyclerView recyclerView;
+    ProductsAdapter mAdapter;
+    DBHelper dbHelper;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_homefragment, container, false);
+        recyclerView = view.findViewById(R.id.games_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(null));
+        productList = new ArrayList<>();
+        dbHelper = new DBHelper(inflater.getContext());
+        dbHelper = dbHelper.OpenReadAble();
+        Product p = new Product();
+        Cursor c = p.Select(dbHelper.getDb());
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            p.setPid(c.getInt(c.getColumnIndexOrThrow(BaseColumns._ID)));
+            p.setGameName(c.getString(c.getColumnIndexOrThrow(COLUMN_PRODUCT_NAME)));
+            p.setProdDisc(c.getString(c.getColumnIndexOrThrow(COLUMN_PRODUCT_DESCRIPTION)));
+            p.setGameprice(c.getDouble(c.getColumnIndexOrThrow(COLUMN_PRODUCT_BUYPRICE)));
+            p.setSaleprice(c.getDouble(c.getColumnIndexOrThrow(COLUMN_PRODUCT_SALEPRICE)));
+            p.setQuantity(c.getInt(c.getColumnIndexOrThrow(COLUMN_PRODUCT_STOCK)));
+            p.setImageByte(c.getBlob(c.getColumnIndexOrThrow(COLUMN_PRODUCT_IMAGE)));
+            productList.add(p);
+            c.moveToNext();
+            p=new Product();
+        }
+        // adapter
+        mAdapter = new ProductsAdapter(inflater.getContext(), productList);
+        recyclerView.setAdapter(mAdapter);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_homefragment, container, false);
+        return  view;
     }
 }

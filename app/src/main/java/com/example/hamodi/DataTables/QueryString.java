@@ -12,13 +12,13 @@ public class QueryString {
                     ProductTable.COLUMN_PRODUCT_STOCK + " INTEGER," +
                     ProductTable.COLUMN_PRODUCT_SALEPRICE + " DOUBLE,"+
                     ProductTable.COLUMN_PRODUCT_BUYPRICE + " DOUBLE,"+
-                    ProductTable.COLUMN_Game_Video_Description + " TEXT "+
                     ProductTable.COLUMN_PRODUCT_IMAGE + " BLOB);";
 
     public static final String SQL_CREATE_CART =
             "CREATE TABLE " + CartTable.TABLE_CART + " (" +
                     CartTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     CartTable.COLUMN_PRODUCT_ID + " INTEGER," +
+                    CartTable.COLUMN_PRODUCT_QUANTITY + " INTEGER," +
                     CartTable.COLUMN_USER_ID + " TEXT);";
 
     public static final String SQL_CREATE_SALE =

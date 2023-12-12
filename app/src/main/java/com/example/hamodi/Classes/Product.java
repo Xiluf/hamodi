@@ -12,6 +12,8 @@ public class Product implements sqlInterface {
 
     //region Attribute
     protected int pid;
+
+
     protected String GameName;
     protected String ProdDisc;
     protected int Quantity;
@@ -21,13 +23,27 @@ public class Product implements sqlInterface {
     //endregion
 
     //region Constructors
-    public Product(String GameName,String ProdDisc,int stock,double saleprice,double Gameprice,byte[] image){
+    public Product(String GameName,String ProdDisc,int quantity,double saleprice,double Gameprice,byte[] image){
         this.saleprice=saleprice;
         this.Gameprice=Gameprice;
         this.GameName=GameName;
         this.ProdDisc=ProdDisc;
-        this.Quantity=Quantity;
+        this.Quantity=quantity;
         this.imageByte = image;
+    }
+
+    public Product() {
+
+    }
+
+    public Product(Product p) {
+        pid = p.getPid();
+        Gameprice = p.getGameprice();
+        GameName = p.getGameName();
+        saleprice = p.getSaleprice();
+        ProdDisc = p.getProdDisc();
+        Quantity = p.getQuantity();
+        imageByte = p.getImageByte();
     }
     //endregion
 
@@ -68,7 +84,7 @@ public class Product implements sqlInterface {
         values.put(COLUMN_PRODUCT_BUYPRICE, Gameprice);
         values.put(COLUMN_PRODUCT_SALEPRICE, saleprice);
         values.put(COLUMN_PRODUCT_STOCK, Quantity);
-        values.put(COLUMN_PRODUCT_IMAGE, imageByte.toString());
+        values.put(COLUMN_PRODUCT_IMAGE, imageByte);
 
 // Which row to update, based on the title
         String selection = BaseColumns._ID + " LIKE ?";
@@ -82,6 +98,7 @@ public class Product implements sqlInterface {
 
     }
 
+
     @Override
     public Cursor Select(SQLiteDatabase db) {
         String[] projection = {
@@ -93,18 +110,42 @@ public class Product implements sqlInterface {
                 COLUMN_PRODUCT_SALEPRICE,
                 COLUMN_PRODUCT_BUYPRICE
         };
+
 // How you want the results sorted in the resulting Cursor
-        String sortOrder =
-                BaseColumns._ID + " DESC";
         Cursor c = db.query(TABLE_PRODUCT,
                 projection,
                 null,
                 null,
                 null,
                 null,
-                sortOrder);
+                null);
         return c;
     }
+    public Cursor SelectById(SQLiteDatabase db,String id) {
+        String[] projection = {
+                BaseColumns._ID,
+                COLUMN_PRODUCT_NAME,
+                COLUMN_PRODUCT_DESCRIPTION,
+                COLUMN_PRODUCT_IMAGE,
+                COLUMN_PRODUCT_STOCK,
+                COLUMN_PRODUCT_SALEPRICE,
+                COLUMN_PRODUCT_BUYPRICE
+        };
+        String selection = BaseColumns._ID + " = ?";
+        String[] selectionArgs = {id};
+
+        Cursor c = db.query(
+                TABLE_PRODUCT,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null  );
+        return c;
+    }
+
+
 
     //endregion
 
@@ -117,28 +158,28 @@ public class Product implements sqlInterface {
         this.pid = pid;
     }
 
-    public String getProdname() {
+    public String getGameName() {
         return GameName;
     }
 
-    public void setProdname(String prodname) {
-        this.GameName = GameName;
+    public void setGameName(String gameName) {
+        GameName = gameName;
     }
 
     public String getProdDisc() {
         return ProdDisc;
     }
 
-    public void setProdDisc(String proddisc) {
-        this.ProdDisc = ProdDisc;
+    public void setProdDisc(String prodDisc) {
+        ProdDisc = prodDisc;
     }
 
-    public int getStock() {
+    public int getQuantity() {
         return Quantity;
     }
 
-    public void setStock(int stock) {
-        this.Quantity = Quantity;
+    public void setQuantity(int quantity) {
+        Quantity = quantity;
     }
 
     public double getSaleprice() {
@@ -149,13 +190,25 @@ public class Product implements sqlInterface {
         this.saleprice = saleprice;
     }
 
-    public double getBuyprice() {
+    public double getGameprice() {
         return Gameprice;
     }
 
-    public void setBuyprice(double buyprice) {
-        this.Gameprice = Gameprice;
+    public void setGameprice(double gameprice) {
+        Gameprice = gameprice;
     }
-    //endregion
 
+    public byte[] getImageByte() {
+        return imageByte;
+    }
+
+    public void setImageByte(byte[] imageByte) {
+        this.imageByte = imageByte;
+    }
+
+    //endregion
+    @Override
+    public String toString(){
+        return GameName + " \n price: " + Gameprice;
+    }
 }

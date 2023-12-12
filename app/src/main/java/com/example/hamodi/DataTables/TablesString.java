@@ -15,7 +15,6 @@ public class TablesString {
         public static final String COLUMN_PRODUCT_STOCK = "Stock";
         public static final String COLUMN_PRODUCT_SALEPRICE = "SalePrice";
         public static final String COLUMN_PRODUCT_BUYPRICE = "GamePrice";
-        public static final String COLUMN_Game_Video_Description = "VidDisc";
 
     }
     //endregion
@@ -24,6 +23,7 @@ public class TablesString {
     public static class CartTable implements BaseColumns {
         public static final String TABLE_CART = "Cart";
         public static final String COLUMN_PRODUCT_ID = "PID";
+        public static final String COLUMN_PRODUCT_QUANTITY = "Quantity";
         public static final String COLUMN_USER_ID = "UID";
 
 

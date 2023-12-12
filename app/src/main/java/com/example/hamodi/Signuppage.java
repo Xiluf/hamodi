@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,13 +19,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class Signuppage extends AppCompatActivity {
+public class Signuppage extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     EditText fullNameEditText;
     EditText emailEditText;
     EditText passwordEditText;
     EditText repasswordEditText;
     Button registerButton;
+    EditText admincode;
+    Button RegisterButton;
+    Switch isadmin;
     TextView errorText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +37,12 @@ public class Signuppage extends AppCompatActivity {
         fullNameEditText=findViewById(R.id.ptUserName);
         emailEditText=findViewById(R.id.ptSignUp);
         passwordEditText=findViewById(R.id.Ppassword);
-        repasswordEditText=findViewById(R.id.PasswordConfirm);
+        repasswordEditText=findViewById(R.id.PpasswordConfirm);
         registerButton=findViewById(R.id.Bregister);
         errorText=findViewById(R.id.TvError);
+        isadmin = findViewById(R.id.SwAdmin);
+        admincode = findViewById(R.id.etAdminCode);
+        isadmin.setOnCheckedChangeListener(this);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +77,11 @@ public class Signuppage extends AppCompatActivity {
             errorText.setText("password dosn't match");
             return;
         }
+        if(isadmin.isChecked() && !admincode.getText().toString().equals("13579")) {
+            errorText.setVisibility(View.VISIBLE);
+            errorText.setText("admin code is incorrect");
+            return;
+        }
         final FirebaseAuth mAuth=FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,28 +90,39 @@ public class Signuppage extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = mAuth.getCurrentUser();
+                            String name = fullNameEditText.getText().toString();
+                            if (isadmin.isChecked()) {
+                                name = "admin: " + name;
 
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(fullNameEditText.getText().toString())
-                                    .build();
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name)
+                                        .build();
 
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                startActivity(new Intent(Signuppage.this,MainActivity.class));
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    startActivity(new Intent(Signuppage.this, MainActivity.class));
+                                                }
                                             }
-                                        }
-                                    });
-                        } else {
+                                        });
+                            } else {
 
-                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            errorText.setVisibility(View.VISIBLE);
-                            errorText.setText(task.getException().getMessage());
+                                //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                errorText.setVisibility(View.VISIBLE);
+                                errorText.setText(task.getException().getMessage());
 
+                            }
                         }
-                    }
-                });
+                    }});
+        }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if(isadmin.isChecked())
+            admincode.setVisibility(View.VISIBLE);
+        else
+            admincode.setVisibility(View.GONE);
     }
 }

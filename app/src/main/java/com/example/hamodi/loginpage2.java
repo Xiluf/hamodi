@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.hamodi.Admin.AddProductActivity;
+import com.example.hamodi.Admin.ShowProduct;
+import com.example.hamodi.Classes.Cart;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,7 +25,7 @@ public class loginpage2 extends AppCompatActivity {
     EditText passwordEditText;
     Button loginButton;
     TextView newAccountButton;
-    TextView error;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,7 @@ public class loginpage2 extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                error.setVisibility(View.GONE);
+
                 final FirebaseAuth mAuth=FirebaseAuth.getInstance();
                 mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
                         .addOnCompleteListener(loginpage2.this, new OnCompleteListener<AuthResult>() {
@@ -51,7 +54,8 @@ public class loginpage2 extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     FirebaseUser user = mAuth.getCurrentUser();
-
+                                    Intent i = new Intent(loginpage2.this, Cart.class);
+                                    startActivity(i);
                                 } else {
 
                                     Log.d("error","erro");
